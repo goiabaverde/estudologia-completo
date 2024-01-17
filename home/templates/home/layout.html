@@ -33,7 +33,6 @@
                 <li class="nav_link"><a href="{% url 'about_me' %}">Sobre Mim</a></li>
                 {% if request.user.is_authenticated %}
                 <li><a href="{% url 'historic_hub' %}">Histórico</a></li>
-                <li>{{request.user.username}}</li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
                 <li class="nav_link"><a href="{% url 'login' %}">Login</a></li>

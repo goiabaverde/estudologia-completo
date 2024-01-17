@@ -1,43 +1,3 @@
-function select_grid(grid){
-    try{
-        document.querySelector('.input_area').innerHTML = '';
-    }catch (e){console.log(e)}
-    
-    const grid_type = grid
-    const form = document.createElement("form");
-    form.setAttribute('onsubmit', 'return false')
-    document.querySelector('.input_area').append(form)
-    const div = document.createElement('div')
-    div.className = 'grid'
-    div.id = `class-${grid_type}`
-    form.append(div)
-
-    for(var i = 0; i < parseInt(grid); i++){
-        for(var j = 0; j < parseInt(grid); j++ ){
-            let input = document.createElement('input')
-            input.setAttribute('type', 'number')
-            input.setAttribute("name", `item-${grid}x${grid}-${i+1}_${j+1}`)
-            input.setAttribute('onkeypress', 'change_width(this)')
-            input.className = `c${j+1}-${grid}x${grid}`
-            input.id = `item-${grid}x${grid}-${i+1}_${j+1}`
-            div.append(input)
-            input.required = true
-     
-        }
-        const br = document.createElement('br')
-        div.append(br)
-        
-    }
-    const input = document.createElement('button')
-    input.setAttribute('type', 'submit')
-    input.setAttribute('onclick', 'get_values()')
-    input.id = 'submit_det'
-    input.className = 'btn btn-primary'
-    input.innerHTML = 'Calculate'
-    div.append(input)
-}
-
-
 try{
     const { matrix, create, wienDisplacementDependencies } = require("mathjs")
     const { values } = require("regenerator-runtime")
@@ -92,18 +52,20 @@ function change_width(event_target){
 
 async function edit(id){
     const new_id = parseInt(id)
-    const response = await fetch(`http://127.0.0.1:8000/apps/edit/${new_id}`)
+    const response = await fetch(`http://127.0.0.1:8000/apps/editar/${new_id}`)
     window.location.href = `${response.url}`;
 }
 
 async function remove(id){
     document.querySelector(`#id_${id}`).remove()
-    await fetch(`http://127.0.0.1:8000/apps/remove/${parseInt(id)}`)
+    await fetch(`http://127.0.0.1:8000/apps/remover/${parseInt(id)}`)
 }
 
 async function edit_matrix(id){
-    const response = await fetch(`http://127.0.0.1:8000/apps/edit/matrix/${parseInt(id)}`)
+    console.log(id)
+    const response = await fetch(`http://127.0.0.1:8000/apps/editar/matriz/${parseInt(id)}`)
     const data = await response.json()
+    console.log(data)
     if(data.determinant){
         $("body").load("http://127.0.0.1:8000/apps/determinant", function(){
             console.log("DETERMINANT")
@@ -125,7 +87,7 @@ async function edit_matrix(id){
         });
        
     }else{
-        $("body").load("http://127.0.0.1:8000/apps/product", function(){
+        $("body").load("http://127.0.0.1:8000/apps/produto", function(){
            document.querySelector('#row_a').value = parseInt(data.number_rows_a)
            document.querySelector('#co_a').value = parseInt(data.number_colunms_a)
            document.querySelector('#co_b').value = parseInt(data.number_colunms_b)
@@ -162,7 +124,7 @@ async function edit_matrix(id){
 
 async function remove_matrix(id){
     document.querySelector(`#id_${id}`).remove()
-    await fetch(`http://127.0.0.1:8000/apps/removev/matriz/${parseInt(id)}`)
+    await fetch(`http://127.0.0.1:8000/apps/remover/matriz/${parseInt(id)}`)
 }
 
 async function edit_function(id){
@@ -173,5 +135,5 @@ async function edit_function(id){
 
 async function remove_function(id){
     document.querySelector(`#id_${id}`).remove()
-    await fetch(`http://127.0.0.1:8000/apps/remove/function/${parseInt(id)}`)
+    await fetch(`http://127.0.0.1:8000/apps/remover/funcao/${parseInt(id)}`)
 }

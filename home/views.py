@@ -23,13 +23,11 @@ def login_view(request):
            password = form.cleaned_data['password']
            user = authenticate(request, username=username, password=password)
            if user is not None:
-               print("LOGA")
                login(request, user)
                return HttpResponseRedirect(reverse("home"))
            else:
-                print("Nao loga")
                 return render(request, "home/login.html", {
-                "msg": "Invalid username and/or password.", 'form' : form
+                "msg": "Usuário ou senha inválido.", 'form' : form
             })
                
     else:
@@ -51,22 +49,21 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
-            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             confirm_password = form.cleaned_data['confirm_password']
             if(password != confirm_password):
-                return render(request, "home/register.html", {'form' : form  ,
-                "msg": "Passwords must match."
+                return render(request, "home/register.html", {'form' : RegisterForm,
+                "msg": "Senhas devem ser iguais."
             })
             
             try:
-                user = User.objects.create_user(username, email, password)
+                user = User.objects.create_user(username,  password)
                 user.save()
                 login(request,user)
                 new_inventory = Inventory(user = user)
                 new_inventory.save()
             except IntegrityError:
-                return render(request, "home/register.html", { 'msg' : 'Username and/or email are already registered try another.' ,'form' : RegisterForm})
+                return render(request, "home/register.html", { 'msg' : 'Usuário já foi registrado tente outro.' ,'form' : RegisterForm})
 
             return HttpResponseRedirect(reverse('home'))
     else:
@@ -85,11 +82,11 @@ def courses(request):
         courses_of_user = Inventory.objects.get(user = request.user).courses.all()
         print(courses_of_user)
 
-#check if the uses at least one course added, because with a empty Inventory the for lopp can't be done
+#check if the uses at least one course added, because with a empty Inventory the for lopo can't be done
         if len(courses_of_user) == 0:
             available_courses = Course.objects.all()
             #message that you be used on rendering
-            my_courses_msg = 'Try to add a course!'
+            my_courses_msg = 'Tente adicionar um curso!'
         
 #for loop to know what courses has been added by the user
         else:
@@ -102,7 +99,7 @@ def courses(request):
                 available_courses.append(course)
 
         if len(available_courses) == 0:
-            avaialble_courses_msg = "There is no avaialble course."
+            avaialble_courses_msg = "Não há curso disponível."
         else:
             avaialble_courses_msg = ''
             
@@ -114,7 +111,7 @@ def courses(request):
         print(error)
         print("anonimo")
         available_courses = Course.objects.all()
-        return render(request, 'home\courses.html', {"avaialble_courses" : available_courses, "my_courses_msg" : "Try to add a course!" })
+        return render(request, 'home\courses.html', {"avaialble_courses" : available_courses, "my_courses_msg" : "Tente adicionar um curso!" })
 
 
 def course(request, course_url):
@@ -141,59 +138,65 @@ def search_by_category(request, category, local):
     user = request.user
     ids = []
     object = Inventory.objects.get(user = user)
+# courses is the courses that has in the inv
+    courses = object.courses.all()
+    for course in courses:
+        ids.append(course.id)
     if category == 'A':
-        courses = object.courses.all()
+# If the category is Akk abd the len is 0 will show a message saying that the user can add course
+        if local == 'my':
+            if len(ids) == 0:
+                return JsonResponse({'ids' : ids , 'msg' : 'Tente adicionar um curso!'})
+            else:
+                return JsonResponse({'ids' : ids})
+        else:
+# part of the avaialble courses
+            if len(ids) == 0:
+                for course in Course.objects.all():
+                    ids.append(course.id)
+                return JsonResponse({'ids' : ids})
+            if len(ids) == 8:
+                return JsonResponse({'ids' : -1, 'msg' : 'Não há nenhum curso disponível'})
+            else:
+                all_ids = []
+                dis_ids = []
+                for course in Course.objects.all():
+                    all_ids.append(course.id)
+                for id in all_ids:
+                    if id in ids:
+                        pass
+                    else:
+                        dis_ids.append(id)
+                return JsonResponse({"ids" : dis_ids})
+
+
+    if(local == 'my'):
+# Will create another coueses with the filter method
+        courses = courses.filter(category = category).all()
+        ids = []
         for course in courses:
             ids.append(course.id)
-        if local == 'my':
-            return JsonResponse({'ids' : ids})
-        else:
-            avaialble_courses = []
-            my_courses = object.courses.all()
-            print(my_courses)
-            all_courses = Course.objects.all()
-            for course in all_courses:
-                if course in my_courses:
-                    pass
-            else:
-                avaialble_courses.append(course)
-                for course in avaialble_course:
-                    ids.append(course.id)
-            return JsonResponse({'ids' : ids})
+        if(len(ids) == 0):
+            return JsonResponse({'ids' : ids, 'msg' : 'Não há nenhum curso nessa categoria escolhida.'})
+        return JsonResponse({'ids' : ids})
 
-    if local == 'my':
-        courses = object.courses.filter(category = category).all()
-        print(courses)
-        if len(courses) == 0:
-            msg = 'Não há nenhum curso nessa categoria escolhida.'
-        else:
-            msg = ''
-            for course in courses:
-                ids.append(course.id)
     else:
-        avaialble_courses = []
-        my_courses = object.courses.all()
-        print(my_courses)
-        all_courses = Course.objects.all()
-        for course in all_courses:
-            if course in my_courses:
-                pass
-            else:
-                avaialble_courses.append(course)
-        print("UAI")
-        print(avaialble_courses)
-        print(type(avaialble_courses[0]))
-        search_courses = []
-        for avaialble_course in avaialble_courses:
-            if avaialble_course.category == category:
-                search_courses.append(avaialble_course)
-        print('qtd')
-        print(len(search_courses))
-        if len(search_courses) == 0:
-            msg = 'Não há nenhum curso nessa categoria escolhida.'
-        else:
-            msg = ''
-            for course in search_courses:
+        ids = []
+        all_ids = []
+        avaialble_course = []
+        for course in Course.objects.all():
+# If the course is not in courses this means that the couse in avaialble
+           if course in courses:
+               pass
+           else:
+               avaialble_course.append(course)
+        for course in avaialble_course:
+            if course.category == category:
                 ids.append(course.id)
-    print(ids)
-    return JsonResponse({'ids' : ids, 'msg' : msg})
+
+        if(len(ids) == 0):
+             return JsonResponse({'ids' : ids, 'msg' : 'Não há nenhum curso nessa categoria escolhida.'})
+        return JsonResponse({'ids' : ids})
+               
+        
+    

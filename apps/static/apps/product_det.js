@@ -37,7 +37,6 @@ function cancel(){
     document.querySelector('.matrix-result').style.display = 'none'
     document.querySelector('#row_b').value = ''   
     document.querySelector('.result-area').innerHTML = ''
-
 }
 
 
@@ -118,7 +117,7 @@ function get_values(){
             let id_input = input_area[input_area.length - 3].id
             var n_row = id_input[id_input.length - 3]
             var n_co = id_input[id_input.length - 1]
-            await fetch(`http://127.0.0.1:8000/apps/add/matrix`, {
+            await fetch(`http://127.0.0.1:8000/apps/add/matriz`, {
                 method:'post',
                 headers: {'Content-type' : 'application/json' ,'X-CSRFToken' : getCookie('csrftoken'), accept: 'application/json',},
                 body: JSON.stringify({
@@ -126,7 +125,6 @@ function get_values(){
                     n_co: n_co,
                     matrix : matrix,
                     cond: true
-                    
                 })
             })
         }
@@ -290,61 +288,60 @@ function generate_matrix(mode) {
     // Create a list of objects that the keyvalue refers to the colunm
     var widths = []
     
-for(var i = 1; i <= result[0].length; i++){
-    var colunms = []
-    let all_inputs = document.querySelectorAll(`.c${i}-${row_r}x${co_r}`)
-    all_inputs.forEach(input=>{
-        let input_style = window.getComputedStyle(input)
-        let key = `c${i}`
-        let val = input_style.getPropertyValue('width')
-        let obj = {}
-        obj[key] = parseFloat(val)
-        colunms.push(obj)
-    })
-    widths.push(colunms)
-}
-
-
-max_widths = []
-for(var i = 0 ; i < widths.length; i++){
-    var max_width_co = []
-    for(var j = 0; j < widths[i].length; j++){
-        let val = Object.values(widths[i][j])
-        max_width_co.push(val[0])
+    for(var i = 1; i <= result[0].length; i++){
+        var colunms = []
+        let all_inputs = document.querySelectorAll(`.c${i}-${row_r}x${co_r}`)
+        all_inputs.forEach(input=>{
+            let input_style = window.getComputedStyle(input)
+            let key = `c${i}`
+            let val = input_style.getPropertyValue('width')
+            let obj = {}
+            obj[key] = parseFloat(val)
+            colunms.push(obj)
+        })
+        widths.push(colunms)
     }
-    max_widths.push(Math.max(...max_width_co))
-}
 
-for(var i = 1 ; i <= max_widths.length; i++){
-    let inputs = document.querySelectorAll(`.c${i}-${row_r}x${co_r}`)
-    inputs.forEach(input=>{
-        input.style.width = `${max_widths[i - 1]}px`
-    })
-}
+
+    max_widths = []
+    for(var i = 0 ; i < widths.length; i++){
+        var max_width_co = []
+        for(var j = 0; j < widths[i].length; j++){
+            let val = Object.values(widths[i][j])
+            max_width_co.push(val[0])
+        }
+        max_widths.push(Math.max(...max_width_co))
+    }
+
+    for(var i = 1 ; i <= max_widths.length; i++){
+        let inputs = document.querySelectorAll(`.c${i}-${row_r}x${co_r}`)
+        inputs.forEach(input=>{
+            input.style.width = `${max_widths[i - 1]}px`
+        })
+    }
 
 
 let username = document.querySelector("#is_authenticated").value
 
-values_of_matrices = [[row_a, co_a, 'a', matrix_a], [row_b, co_b, 'b', matrix_b]];
-
-        if(username != 'not_logged'){
-            let add_to_model = async function(){
-                await fetch(`http://127.0.0.1:8000/apps/add/matrix`, {
-                    method:'post',
-                    headers: { 'Content-type' : 'application/json', 'X-CSRFToken' : getCookie('csrftoken')},
-                    body: JSON.stringify({
-                        number_rows_a: values_of_matrices[0][0],
-                        number_colunms_a: values_of_matrices[0][1],
-                        number_rows_b: values_of_matrices[1][0],
-                        number_colunms_b: values_of_matrices[1][1],
-                        matrix_a : values_of_matrices[0][3],
-                        matrix_b : values_of_matrices[1][3],
-                        cond : false
+    values_of_matrices = [[row_a, co_a, 'a', matrix_a], [row_b, co_b, 'b', matrix_b]];
+            if(username != 'not_logged'){
+                let add_to_model = async function(){
+                    await fetch(`http://127.0.0.1:8000/apps/add/matriz`, {
+                        method:'post',
+                        headers: { 'Content-type' : 'application/json', 'X-CSRFToken' : getCookie('csrftoken')},
+                        body: JSON.stringify({
+                            number_rows_a: values_of_matrices[0][0],
+                            number_colunms_a: values_of_matrices[0][1],
+                            number_rows_b: values_of_matrices[1][0],
+                            number_colunms_b: values_of_matrices[1][1],
+                            matrix_a : values_of_matrices[0][3],
+                            matrix_b : values_of_matrices[1][3],
+                            cond : false
+                        })
                     })
-                })
-            }
-            add_to_model()
-        }    
+                }
+                add_to_model()
+            }    
 }
 }
 

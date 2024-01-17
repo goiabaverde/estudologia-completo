@@ -66,7 +66,7 @@ def add_element(request):
             object.save()
             pass
         else:
-            return render(request, 'apps/error.html', {'msg' : 'You must be logged to acess the historic of the calculators.'})
+            return render(request, 'apps/error.html', {'msg' : 'Você precisa estar logado para acessar o histórico das calculadoras.'})
 
 def add_matrix(request):
      if request.method == 'POST':
@@ -92,7 +92,7 @@ def add_matrix(request):
                 print(e)
                 return render(request, 'apps/error.html', {'msg' : "You are trying to store a matrix that's not a matrix to calculate the determinant as a determinant matrix."})
         else:
-            return render(request, 'apps/error.html', {'msg' : 'You must be logged to acess the historic of the matrices.'})
+            return render(request, 'apps/error.html', {'msg' : 'Você precisa estar logado para acessar o histórico das matrizes.'})
 
 def add_function(request):
     if(request.user.is_authenticated):
@@ -101,7 +101,7 @@ def add_function(request):
         object.save()
         pass
     else:
-        return render(request, 'apps/error.html',{"msg" : 'You must be logged to acess the historic of the functions.'})
+        return render(request, 'apps/error.html',{"msg" : 'Você precisa estar logado para acessar o histórico das funções.'})
 
 
 def historic_hub(request):
@@ -141,7 +141,7 @@ def edit(request, id):
         element = Historic.objects.get(id = id)
     #Check if the person who is trying to access this element was the person who created this element.
         if(request.user != element.user):
-            return render(request,"apps/error.html", {'msg' : 'You must be person who wrote this element.'}) 
+            return render(request,"apps/error.html", {'msg' : 'Você precisa ser a pessoa que escreveu esse elemento para edita-lo.'}) 
         type = element.type_app
         print(element.type_app)
         if(type == 'pa'):
@@ -156,7 +156,7 @@ def edit(request, id):
         if(type == 'fc'):
             return render(request, 'apps/function.html', {'function' : element.var1 })
     else:
-        return render(request, 'apps/error.html', {'msg' : 'You must be logged to edit the calculators.'})
+        return render(request, 'apps/error.html', {'msg' : 'Você precisa estar logado para editar as calculadoras.'})
 
 
 def edit_matrix(request, id):
@@ -164,7 +164,7 @@ def edit_matrix(request, id):
 
         element = MatricesHistoric.objects.get(id = id)
         if (request.user != element.user):
-            return render(request,"apps/error.html", {'msg' : 'You must be person who wrote this matrix.'}) 
+            return render(request,"apps/error.html", {'msg' : 'Você precisa ser a pessoa que escreveu essa matriz para poder edita-la.'}) 
         if element.determinant:
             print('DET')
             print(element.determinant)
@@ -173,16 +173,16 @@ def edit_matrix(request, id):
             print('NOT DET')
             return JsonResponse({'number_rows_a' : element.number_rows_a, 'number_colunms_a' : element.number_colunms_a, 'matrix_a' : element.matrix_a, 'number_rows_b' : element.number_rows_b, 'number_colunms_b' : element.number_colunms_b, 'matrix_b' : element.matrix_b})
     else:
-        return render(request, 'apps/error.html', {'msg' : 'You must be logged to edit the matrices'})
+        return render(request, 'apps/error.html', {'msg' : 'Você precisa estar logado para editar essa matriz.'})
     
 def edit_function(request,id):
         if(request.user.is_authenticated):
             element = FunctionHistoric.objects.get(id=id)
             if(element.user != request.user):
-                return render(request , 'apps/error.html', {'msg' :  'You must be person who wrote this function.'})
+                return render(request , 'apps/error.html', {'msg' :  'Você precisa ser a pessoa que escreveu essa função para poder edita-la.'})
             return render(request, 'apps/function.html' , {'function' : element.function})
         else:
-            return render(request, 'apps/error.html', {'msg' : 'You must be logged to edit the matrices'})
+            return render(request, 'apps/error.html', {'msg' : 'Você precisa estar logado para editar essa função'})
     
 
 def remove_normal(request, id):
@@ -190,27 +190,27 @@ def remove_normal(request, id):
         print(id)
         object = Historic.objects.get(pk = id).delete()
     else:
-        return render(request, 'apps/error.html', {'msg' : "You can't do this!"})
+        return render(request, 'apps/error.html', {'msg' : "Você não pode fazer isso sem estar logado!"})
 
 def remove_matrix(request, id):
     if(request.user.is_authenticated):
         print(id)
         object = MatricesHistoric.objects.get(pk = id)
         if(object.user != request.user):
-            return render(request, 'apps/error.html', {'msg' : "You must be the person who typed this matrix to delete it"})
+            return render(request, 'apps/error.html', {'msg' : "Você precisa se a pessoa que escrever essa matriz para remove-la."})
         object.delete()
     else:
-        return render(request, 'apps/error.html', {'msg' : "You can't do this!"})
+        return render(request, 'apps/error.html', {'msg' : "Você precisa estar logado para remover essa matriz do histórico."})
     
 def remove_function(request,id):
     if(request.user.is_authenticated):
         print(id)
         object = FunctionHistoric.objects.get(pk = id)
         if(object.user != request.user):
-            return render(request, 'apps/error.html', {'msg' : "You must be the person who typed this fuction to delete it"})
+            return render(request, 'apps/error.html', {'msg' : "Você precisa ser a pessoa que escreveu essa função para remove-la."})
         object.delete()
     else:
-        return render(request, 'apps/error.html', {'msg' : "You can't do this!"})
+        return render(request, 'apps/error.html', {'msg' : "Você precisa estar logado para remover essa função do histórico."})
 
 def function(request):
     return render(request, 'apps/function.html')

@@ -606,6 +606,18 @@ table tbody, table thead {
     margin: 0 10px;
 }
 
+#msg_my, #msg_avaialble{
+    margin: 0 10px;
+}
+
 #function_input{
     width: 80px;
+}
+
+.centralized-alert{
+    display: flex;
+    width: 50vw;
+    justify-content: center;
+    text-align: center;
+    display: none;
 }

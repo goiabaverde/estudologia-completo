@@ -43,17 +43,18 @@
 <script>
     document.addEventListener("DOMContentLoaded", ()=>{
         document.querySelector("#id_username").style.textAlign = 'left';
-        document.querySelector('#id_email').setAttribute('placeholder', 'Email')
-        document.querySelector('#id_email').setAttribute('autocomplete', 'off')
-        document.querySelector('#id_email').style.textAlign = 'left';
-        document.querySelector('#id_password').setAttribute('placeholder', 'Senha')
+        document.querySelector('#id_password').setAttribute('placeholder', 'Senha');
         document.querySelector('#id_password').style.textAlign = 'left';
         document.querySelector('#id_confirm_password').setAttribute('placeholder', 'Confirme a Senha');
         document.querySelector('#id_confirm_password').style.textAlign = 'left';
+        document.querySelector("#span_msg").addEventListener("change", ()=>{
+            document.querySelector("#span_msg").style.display = 'block'
+        })
         // Use to the site now show the error msg if it is empty
-        if(document.querySelector(".alert").textContent == '\n            \n        '){
-            document.querySelector(".alert").style.display = 'none';
+        if(document.querySelector("#span_msg").textContent != ''){
+            document.querySelector(".centralized-alert").style.display = 'flex'
         }
+           
     })
 </script>
 
@@ -71,15 +72,18 @@
             <div class="centralized-text">
                 <div id="submit_btn_area">
                     <input type="submit" value="Enviar" >
+                    
+                </div>
+                
+            </div>
+            <div class="centralized-alert">
+                <div class="alert alert-danger" role="alert">
+                   <span id="span_msg">{{msg}}</span>
                 </div>
             </div>
         </div>
     </form>
-    <div class="centralized">
-        <div class="alert alert-danger" role="alert">
-            <span>{{msg}}</span>
-        </div>
-    </div>
+    
     </div>
 </div>
 </main>

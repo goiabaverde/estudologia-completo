@@ -12,16 +12,14 @@ async function updateCourse(){
   const cond = document.querySelector('.login_cond').value
   document.querySelector(".my_msg_div").innerHTML = ''
   document.querySelector(".avaialble_msg_div").innerHTML = ''
-  console.log(id)
-  console.log("clicou")
   if( await cond != 'true'){
     window.location.href = 'http://127.0.0.1:8000/login'
-    window.alert('To add a course to my courses list you need to be logged.')
+    window.alert('Para adicionar um curso para a sua lista é necessário que esteja logado!')
   }else{
     // do the fetch to change the inventory
-  const response = await fetch(`courses/Update/Course/${id}`)
+    
+  const response = await fetch(`cursos/atualizar/${id}`)
   const data = await response.json()
-  console.log(data)
   const cond = document.querySelector(`.cond_${id}`).value
 
   //Create the strutures to add in the HTML page with ajax
@@ -133,7 +131,7 @@ async function updateCourse(){
     console.log("Don't have this element to remove")
   } 
   }else{
-    document.querySelector('.my_msg_div').innerHTML = '<p id = "msg_my">Try to add a course!</p>'
+    document.querySelector('.my_msg_div').innerHTML = '<p id = "msg_my">Tente adicionar um curso!</p>'
     
   }
   if(content_avaialble_courses.children.length >= 1){
@@ -143,29 +141,21 @@ async function updateCourse(){
       console.log("Don't have this element to remove")
     }
   }else{
-    document.querySelector(`.avaialble_msg_div`).innerHTML = '<p id = "msg_avaialble">There is no avaialble courses.</p>'
+    document.querySelector(`.avaialble_msg_div`).innerHTML = '<p id = "msg_avaialble">Não há cursos disponíveis.</p>'
 
   }
   //Correcting the cards and paragraph with wrong theme 
   var all_cards = document.querySelectorAll('.card')
-  console.log(all_cards)
   try{
-    console.log("corrigindo")
     var body = document.querySelector('body')
     if(body.className == 'dark'){
       var theme = 'dark'
       all_cards.forEach(card=>{
-        console.log(card)
         if(card.children[1].className != 'card-body dark'){
-          console.log(card.children[1])
           card.children[1].classList = 'card-body dark'
           let card_body = card.children[1]
 
           // It's used .value because it's returning a Dom Token List
-          console.log(card_body.children[1])
-          console.log(card_body.children[1].className)
-          console.log(card_body.children[1].classList)
-          console.log(card_body.children[1].classList.value)
           card_body.children[1].className = 'card-text dark'
         }
       })
@@ -187,7 +177,6 @@ async function updateCourse(){
 async function course_category(event_target){
   // return the cards to a way that all are present
   var cards = await document.querySelectorAll('.card')
-  console.log(cards)
   cards.forEach(card=>{
     card.style.display = '';
   })
@@ -196,49 +185,55 @@ async function course_category(event_target){
   const category = event_target.value
   const local_id = event_target.id
   const local = (local_id == 'category_select_my_course') ? 'my' : 'avaialble'
-  console.log(local)
-  console.log(category)
-  console.log(local_id)
-  if(local == 'my'){
-    var content = document.querySelector('.my_courses')
-  }else{
-    var content = document.querySelector('.content_avaialble_courses')
-  }
+  var content = local == 'my'? document.querySelector('.my_courses') : document.querySelector('.content_avaialble_courses')
   cards = content.querySelectorAll('.card')
-  const response = await fetch(`courses/search/category/${category}/${local}`)
+  const response = await fetch(`cursos/pesquisar/categoria/${category}/${local}`)
   const data = await response.json()
-  console.log(data)
-  console.log(data.ids)
-  const ids = data.ids
+  var ids = data.ids
+  console.log(ids)
+  if(category == 'A'){
+    if(local == 'my'){
+      if(ids.length == 0){
+        document.querySelector('.my_msg_div').innerHTML = `<p id ='msg_my'>${data.msg}</p>`
+      }
+    }
+    else{
+      if(ids == -1){
+        document.querySelector('.avaialble_msg_div').innerHTML = `<p id = 'msg_avaialble'>${data.msg}</p>`
+        if(document.querySelector('body').className == 'dark'){
+          try{
+           document.querySelector('#msg_avaialble').classList = 'dark'
+          }catch (e){
+            console.log(e)
+          }
+        }
+
+}}}
+
+
   if(ids.length == 0){
     if(local == 'my'){
-      document.querySelector('.my_msg_div').innerHTML = `<p class ='msg'>${data.msg}</p>`
+      document.querySelector('.my_msg_div').innerHTML = `<p id ='msg_my'>${data.msg}</p>`
       cards.forEach(card=>{
-        console.log(card.id)
         document.querySelector(`#${card.id}`).style.display = 'none';   
       })
-      console.log(document.querySelector('body').className)
       if(document.querySelector('body').className == 'dark'){
-        console.log("CORRigindo")
         try{
-         document.querySelector('.msg').classList = 'dark'
+         document.querySelector('#msg_my').classList = 'dark'
         }catch (e){
           console.log(e)
         }
       }
       return 0
     }else{
-      document.querySelector('.avaialble_msg_div').innerHTML = `<p class = 'msg'>${data.msg}</p>`
+      document.querySelector('.avaialble_msg_div').innerHTML = `<p id = 'msg_avaialble'>${data.msg}</p>`
       cards.forEach(card=>{
-        console.log(card.id)
         document.querySelector(`#${card.id}`).style.display = 'none';
       
       })
-      console.log(document.querySelector('body').className)
       if(document.querySelector('body').className == 'dark'){
-        console.log("CORRigindo")
         try{
-         document.querySelector('.msg').classList = 'dark'
+         document.querySelector('#msg_avaialble').classList = 'dark'
         }catch (e){
           console.log(e)
         }
@@ -247,23 +242,18 @@ async function course_category(event_target){
     }
 
   }
-  console.log(ids)
   var wanted_cards = [];
-  console.log(typeof(wanted_cards))
  
   cards.forEach(card=>{
     ids.forEach(id=>{
-      console.log(card.id)
       if(card.id == `card_${id}`){
         wanted_cards.push(card.id)
       }
     })
   })
-  console.log(wanted_cards)
 
   cards.forEach(card=>{
     if(wanted_cards.indexOf(card.id) == -1){
-      console.log(card.id)
       document.querySelector(`#${card.id}`).style.display = 'none';
     }
   })
