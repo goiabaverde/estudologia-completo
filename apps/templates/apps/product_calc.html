@@ -1,0 +1,77 @@
+{% extends 'apps/layout.html' %}
+{% load static %}
+
+{% block title %}Calculadora de Produtos de Matrizes{% endblock %}
+{% block scripts %} <script src="{% static 'apps/product_det.js' %}"></script> 
+<script src="{% static 'apps/basic02.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.1/math.js"></script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", ()=>{
+        const matrix = math.matrix([[1, 2], [3, 4]]);
+        const transpose = math.transpose(matrix);
+        console.log(transpose);
+ 
+        function multiply_matrices(a, b){
+           var result =  math.multiply(a, b)
+           return result
+          
+        }
+
+       
+    })
+   
+</script>
+<div class="calculator">
+    <h1>Teoria sobre o produto de matrizes</h1>
+    <div class="centralized">
+        <div class="content_theory">
+            <p>A multiplicação de matrizes para acontecer é necessário obdecer algumas condições como: o número de colunas da primeira matriz deve ser igual ao número de linhas da segunda matriz.</p>
+            <p>A matriz resuldante dessa multiplicação tera seu número de linhas igual ao número de linhas da primeira matriz e o seu número de colunas igual ao número de colunas da segunda matriz.</p>
+            <img src="{% static 'apps/images/Image37.gif' %}" alt="">
+            <p>OBS: O produto de A vezes B é difente de B vezes A, sendo assim a ordem importa na multiplicação de matrizes. </p>
+            <p>Para multiplocar duas matrizes o primeiro elemento da primeira linha da primeira matriz é multiplicado pelo primeiro elemento da primeira coluna da segunda matriz e assim por diante..., para mais informações clique <a href="https://youtu.be/eCmv6v53V88" rel="external" target="_blank">aqui.</a></p>
+        </div>
+    </div>
+    <h1>Calculadora de produto de matrizes</h1>
+    <div class="matrices_area">
+        <form action="" onsubmit="return false" class="form_product" id="form_product">
+            <input type="hidden" name="" id="mode" value="get_data">
+            <div class="generate_field">
+                <h3>Matriz A</h3>
+                <div class="input_area_generate_matrix">
+                    <input type="number" name="row_a" id="row_a" class="input_product"  onkeypress="this.style.width = ((this.value.length + 1) * 8) + 40 + 'px';" required>
+                    <p>X</p>
+                    <input type="number" name="co_a" id="co_a" class="input_product" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 40 + 'px';" required>
+            
+                </div>
+                <div class="matrix-a"></div>
+            </div>
+    
+            <div class="generate_field">
+                <h3>Matriz B</h3>
+                <div class="input_area_generate_matrix">
+                    <input type="number" name="row_b" id="row_b" class="input_product" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 40 + 'px';" disabled >
+                    <p>X</p>
+                    <input type="number" name="co_b" id="co_b" class="input_product" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 40 + 'px';" required>
+                   
+                </div>
+                <div class="matrix-b"></div>
+            </div>
+            <div class="submit_btn_product">
+                <button  type="submit" id="get_data" class="btn btn-primary" onclick="generate_matrix(this.id)">Gerar Matrizes</button>
+                <button onclick="cancel()" id="cancel_btn" class="btn btn-danger">Cancelar</button>
+            </div>
+        </form>
+    </div>
+    <div class="centralized">
+        <div class="matrix-result">
+            <p id="p_result">Matriz resultado:</p>
+            <br>
+            <div class="result-area"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

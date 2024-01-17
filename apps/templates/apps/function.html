@@ -1,0 +1,42 @@
+{% extends 'apps/layout.html' %}
+{% load static %}
+
+{% block title %}Calculadora Gráfica{% endblock %}
+{% block scripts %} <script src="{% static 'apps/basic02.js' %}"></script> 
+<script src="{% static 'apps/function.js' %}"></script> 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block body %}
+<script>
+    document.addEventListener("DOMContentLoaded", ()=>{
+        // After the edit featuere loads correct the width of the value
+        let length = document.querySelector('#function_input').value.length
+        if(length != 0){
+            document.querySelector('#function_input').style.width = `${((length + 1) * 8) + 40}px `
+        }
+    })
+</script>
+
+<div class="calculator">
+    <h1>Calculadora Gráfica de Funções</h1>
+            <div class="input-area">
+                <form onsubmit="return false;">
+                    <input type="text" name="function_input" id="function_input" placeholder="f(x)" onkeypress="this.style.width =((this.value.length + 1)* 8) + 40 + 'px'" value="{{ function }}">
+                    <button type="submit" value="new_progression" class="btn btn-primary" id="submit_btn">Gerar</button >
+                </form>
+                <h2>Observações...</h2>
+                <div class="centralized">
+                    <div class="obs">
+                        <p>Para usar a operação de exponenciação é necessário usar o sinal ^ , por exemplo 2^3 = 8 </p>
+                        <p>Para usar a função logaritmica é necessário deixar explícito a base e o logaritmando entre parênteses, como no exemplo: log2(8) = 3</p>
+                        <p>Funções trigonométricas são permitidas somente a seno, cosseno e tangente e para utilizadas escreva a sua abreviação sen, cos e tg respectivamente e o argumente deve ser passado em radianos e dentro de parênteses, como no exemplo: sen(x)</p>
+                    </div>
+                </div>
+                </div>
+        <
+        <canvas id="graphCanvas" width="400" height="400"></canvas>
+       
+    </div>
+</div>
+{% endblock %}

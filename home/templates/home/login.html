@@ -1,0 +1,85 @@
+{% extends 'home/layout.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+
+<style>
+    label{
+        display: flex;
+        align-items: center;
+        margin: 0;
+    }
+
+    input[type = 'text'], input[type = 'password']{
+        border: none;
+        border-radius: 10px;
+        outline: none;
+        padding: 0 10px;
+        background-color: #DEE4E7;
+    }
+    .submit_btn_area{
+        margin-top :10px ;
+        width: 50vw;
+    }
+    input[type = 'submit']{
+        background-color: #007bff;
+        width: 25vw;
+        border-radius: 40px;
+        line-height: 30px;
+        outline: none;
+        border: none;
+        color: white;
+        font-weight: bold;
+    }
+    .alert{
+        margin-top: 10px;
+        color: black;
+        width: 30vw;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", ()=>{
+        document.querySelector('#id_username').setAttribute('placeholder', 'Usuário')
+        document.querySelector('#id_username').setAttribute('autocomplete', 'off')
+        document.querySelector('#id_username').style.textAlign = 'left';
+        document.querySelector('#id_password').setAttribute('placeholder', 'Senha')
+        document.querySelector('#id_password').style.textAlign = 'left';
+        // Use to the site now show the error msg if it is empty
+        if(document.querySelector(".alert").textContent == '\n            \n        '){
+            document.querySelector(".alert").style.display = 'none';
+        }
+        
+    })
+  
+</script>
+
+<main>
+    <div class="centralized">
+        <h1 class="h">Login</h1>
+    </div>
+<div class="content">
+    <div class="text_content">
+    <form action="{% url 'login' %}" method="POST">
+        <div class="form_area">
+            {{form}}
+            {% csrf_token %}
+            <div class="centralized-text">
+                <div class="submit_btn_area">
+                    <input type="submit" value="Enviar">
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="centralized">
+        <div class="alert alert-danger" role="alert">
+            <span>{{msg}}</span>
+        </div>
+    </div>
+    </div>
+</div>
+</main>
+
+{% endblock %}

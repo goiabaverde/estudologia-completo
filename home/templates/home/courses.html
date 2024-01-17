@@ -1,0 +1,356 @@
+{% extends 'home/layout.html' %}
+{% block title %}Cursos{% endblock %}
+
+{% block body %}
+<script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<script>
+async function updateCourse(){
+  const id = window.event.target.value
+  const cond = document.querySelector('.login_cond').value
+  document.querySelector(".my_msg_div").innerHTML = ''
+  document.querySelector(".avaialble_msg_div").innerHTML = ''
+  console.log(id)
+  console.log("clicou")
+  if( await cond != 'true'){
+    window.location.href = 'http://127.0.0.1:8000/login'
+    window.alert('To add a course to my courses list you need to be logged.')
+  }else{
+    // do the fetch to change the inventory
+  const response = await fetch(`courses/Update/Course/${id}`)
+  const data = await response.json()
+  console.log(data)
+  const cond = document.querySelector(`.cond_${id}`).value
+
+  //Create the strutures to add in the HTML page with ajax
+  const card_div = document.createElement('div');
+  card_div.className = 'card';
+  card_div.setAttribute('style', 'width: 18rem;');
+  card_div.setAttribute('id', `card_${id}`);
+
+  const card_body = document.createElement('div')
+  card_body.className = 'card-body'
+
+  const a_image = document.createElement('a');
+  a_image.setAttribute('href', `/courses/${data.url}`)
+
+  const image = document.createElement('img')
+  image.className = 'card-img-top'
+  image.setAttribute('src', `../static/home/images/${data.image}`)
+  
+  const a_title = document.createElement('a');
+  a_title.setAttribute('href',`/courses/${data.url}`);
+  a_title.innerText = `${data.name}`;
+
+  const abstract = document.createElement('p');
+  abstract.setAttribute('class', 'card-text')
+  abstract.innerText = `${data.abstract}`
+
+  const div_buttons = document.createElement('div')
+  div_buttons.className = 'buttons'
+
+
+  // Set the elements to be rendered and remove the previous card
+  var elements = [a_title, abstract]
+  document.querySelector(`#card_${id}`).remove()
+  if (cond == 'my_course'){
+  // if cond is my_course the card was in my_course are, now it will be changed to avaialble area
+    const input_hidden = document.createElement('input')
+    input_hidden.className = `cond_${id}`
+    input_hidden.setAttribute('type', 'hidden')
+    input_hidden.setAttribute('name', 'cond')
+    input_hidden.setAttribute('value', 'avaialble_courses')
+
+    const div_avaialble = document.querySelector('.content_avaialble_courses')
+    div_avaialble.append(card_div)
+    card_div.append(a_image)
+    a_image.append(image)
+    card_div.append(card_body)
+    elements.forEach(element=>{
+      card_body.append(element)
+    });
+    card_body.append(input_hidden)
+    card_body.append(div_buttons)
+    
+    //create the correct buttons
+    const more_info_btn = document.createElement('a');
+    more_info_btn.className = 'btn btn-primary';
+    more_info_btn.setAttribute('href', `{% url 'course' course_url=${data.url}}`);
+    more_info_btn.innerText = 'Saiba Mais';
+
+    const add_btn = document.createElement('button');
+    add_btn.className = 'btn btn-success';
+    add_btn.value = `${data.id}`
+    add_btn.setAttribute('onclick', 'updateCourse()')  
+    add_btn.innerText = 'Adicionar'
+
+    const buttons = [more_info_btn, add_btn]
+    buttons.forEach(button=>{
+      div_buttons.append(button)
+    })
+  }else{
+    const input_hidden = document.createElement('input')
+    input_hidden.className = `cond_${id}`
+    input_hidden.setAttribute('type', 'hidden')
+    input_hidden.setAttribute('name', 'cond')
+    input_hidden.setAttribute('value', 'my_course')
+
+    const div_my_course = document.querySelector('.content_my_courses')
+    div_my_course.append(card_div)
+    card_div.append(a_image)
+    a_image.append(image)
+    card_div.append(card_body)
+    elements.forEach(element=>{
+      card_body.append(element)
+    })
+    card_body.append(input_hidden)
+    card_body.append(div_buttons)
+
+    const access_btn = document.createElement('a');
+    access_btn.className = 'btn btn-primary';
+    access_btn.setAttribute('href', `${data.link}`);
+    access_btn.innerHTML = 'Acessar';
+
+    const remove_btn = document.createElement('button');
+    remove_btn.className = 'btn btn-danger';
+    remove_btn.value = `${data.id}`
+    remove_btn.setAttribute('onclick', 'updateCourse()')
+    remove_btn.innerText = 'Remover'
+
+    const buttons = [access_btn, remove_btn]
+
+     buttons.forEach(button=>{
+      div_buttons.append(button)
+     })
+  }
+  const content_my_courses = document.querySelector('.content_my_courses')
+  const content_avaialble_courses = document.querySelector('.content_avaialble_courses')
+  if(content_my_courses.children.length >= 1){
+   try{document.querySelector('#msg_my').remove()
+  }catch{
+    console.log("Don't have this element to remove")
+  } 
+  }else{
+    document.querySelector('.my_msg_div').innerHTML = '<p id = "msg_my">Try to add a course!</p>'
+    
+  }
+  if(content_avaialble_courses.children.length >= 1){
+    try{
+      document.querySelector('#msg_avaialble').remove()
+    }catch{
+      console.log("Don't have this element to remove")
+    }
+  }else{
+    document.querySelector(`.avaialble_msg_div`).innerHTML = '<p id = "msg_avaialble">There is no avaialble courses.</p>'
+
+  }
+  //Correcting the cards and paragraph with wrong theme 
+  var all_cards = document.querySelectorAll('.card')
+  console.log(all_cards)
+  try{
+    console.log("corrigindo")
+    var body = document.querySelector('body')
+    if(body.className == 'dark'){
+      var theme = 'dark'
+      all_cards.forEach(card=>{
+        console.log(card)
+        if(card.children[1].className != 'card-body dark'){
+          console.log(card.children[1])
+          card.children[1].classList = 'card-body dark'
+          let card_body = card.children[1]
+
+          // It's used .value because it's returning a Dom Token List
+          console.log(card_body.children[1])
+          console.log(card_body.children[1].className)
+          console.log(card_body.children[1].classList)
+          console.log(card_body.children[1].classList.value)
+          card_body.children[1].className = 'card-text dark'
+        }
+      })
+      var all_p = document.querySelectorAll('p')
+      all_p.forEach(p=>{
+        if(p.className != 'dark'){
+          p.className = 'dark'
+        }
+      })
+    } 
+  }catch{
+    var theme = 'light'
+  }
+
+  }
+}
+
+//Serch engine of the select by category
+async function course_category(event_target){
+  // return the cards to a way that all are present
+  var cards = await document.querySelectorAll('.card')
+  console.log(cards)
+  cards.forEach(card=>{
+    card.style.display = '';
+  })
+  document.querySelector('.my_msg_div').innerText = ''
+  document.querySelector('.avaialble_msg_div').innerText = ''
+  const category = event_target.value
+  const local_id = event_target.id
+  const local = (local_id == 'category_select_my_course') ? 'my' : 'avaialble'
+  console.log(local)
+  console.log(category)
+  console.log(local_id)
+  if(local == 'my'){
+    var content = document.querySelector('.my_courses')
+  }else{
+    var content = document.querySelector('.content_avaialble_courses')
+  }
+  cards = content.querySelectorAll('.card')
+  const response = await fetch(`courses/search/category/${category}/${local}`)
+  const data = await response.json()
+  console.log(data)
+  console.log(data.ids)
+  const ids = data.ids
+  if(ids.length == 0){
+    if(local == 'my'){
+      document.querySelector('.my_msg_div').innerHTML = `<p class ='msg'>${data.msg}</p>`
+      cards.forEach(card=>{
+        console.log(card.id)
+        document.querySelector(`#${card.id}`).style.display = 'none';   
+      })
+      console.log(document.querySelector('body').className)
+      if(document.querySelector('body').className == 'dark'){
+        console.log("CORRigindo")
+        try{
+         document.querySelector('.msg').classList = 'dark'
+        }catch (e){
+          console.log(e)
+        }
+      }
+      return 0
+    }else{
+      document.querySelector('.avaialble_msg_div').innerHTML = `<p class = 'msg'>${data.msg}</p>`
+      cards.forEach(card=>{
+        console.log(card.id)
+        document.querySelector(`#${card.id}`).style.display = 'none';
+      
+      })
+      console.log(document.querySelector('body').className)
+      if(document.querySelector('body').className == 'dark'){
+        console.log("CORRigindo")
+        try{
+         document.querySelector('.msg').classList = 'dark'
+        }catch (e){
+          console.log(e)
+        }
+      }
+      return 0
+    }
+
+  }
+  console.log(ids)
+  var wanted_cards = [];
+  console.log(typeof(wanted_cards))
+ 
+  cards.forEach(card=>{
+    ids.forEach(id=>{
+      console.log(card.id)
+      if(card.id == `card_${id}`){
+        wanted_cards.push(card.id)
+      }
+    })
+  })
+  console.log(wanted_cards)
+
+  cards.forEach(card=>{
+    if(wanted_cards.indexOf(card.id) == -1){
+      console.log(card.id)
+      document.querySelector(`#${card.id}`).style.display = 'none';
+    }
+  })
+
+}
+</script>
+
+{% if request.user.is_authenticated %}
+<input type="hidden" name="login_cond" class="login_cond" value="true">
+{% else %}
+<input type="hidden" name="login_cond" class="login_cond" value="false">
+{% endif %}
+
+<h1 class="h">Cursos</h1>
+<h2 class="h">Meus Cursos</h2>
+<select name="category" id="category_select_my_course" class="form-select" onchange="course_category(this)">
+  <option selected value="A">Tudo</option>
+  <option value="L">Linguagens</option>
+  <option value="H">Ciências Humanas</option>
+  <option value="M">Matemática</option>
+  <option value="N">Ciências da Natureza</option>
+</select>
+
+<div class="my_courses">
+<div class="content_my_courses">
+{% if request.user.is_authenticated %}
+{% for my_course in my_courses %}
+<div class="card" style="width: 18rem;" id="card_{{my_course.id}}">
+  <a href="{% url 'course' course_url=my_course.url %}"><img  class="card-img-top" src="../static/home/images{{my_course.image.url}}" alt="Card image cap"></a>
+   <div class="card-body">
+       <a href="{% url 'course' course_url=my_course.url %}">{{my_course.name}}</a>
+      <input type="hidden" name="cond" class="cond_{{my_course.id}}" value="my_course">
+     <p class="card-text">{{ my_course.abstract }}</p>
+     <div class="buttons">
+      <a rel = 'external' href="{{ my_course.link }}" class="btn btn-primary">Acessar</a>
+      <button onclick="updateCourse()" class="btn btn-danger" value="{{my_course.id}}">Remover</button>
+    </div>
+   </div>
+ </div>
+ {% endfor %}
+
+
+</div>
+<div class="my_msg_div">
+  <p id="msg_my">{{my_courses_msg}}</p>
+</div>
+</div>
+
+{% else %}
+</div>
+<div class="my_msg_div">
+  <p id="msg_my">Você só tem acesso aos 'Meus Cursos' se estiver logado.</p>
+</div>
+{% endif %}
+
+<h2 class="h">Cursos Disponíveis</h2>
+
+<select name="category" id="category_select_avialble_course" class="form-select" onchange="course_category(this)"> 
+  <option selected value="A">Tudo</option>
+  <option value="L">Linguagens</option>
+  <option value="H">Ciências Humanas</option>
+  <option value="M">Matemática</option>
+  <option value="N">Ciências da Natureza</option>
+</select>
+
+<div class="avaialble_courses">
+<div class="content_avaialble_courses">
+{% for course in avaialble_courses %}
+<div class="card" style="width: 18rem;" id="card_{{course.id}}">
+   <a href="{% url 'course' course_url=course.url %}"><img  class="card-img-top" src="../static/home/images{{course.image.url}}" alt="Card image cap"></a>
+    <div class="card-body">
+        <a href="{% url 'course' course_url=course.url %}">{{course.name}}</a>
+        <input type="hidden" name="cond" class="cond_{{course.id}}" value="avaialble_courses">
+      <p class="card-text">{{ course.abstract }}</p>
+      <div class="buttons">
+        <a rel="internal" href="{% url 'course' course_url=course.url %}" class="btn btn-primary">Saiba Mais</a>
+        <button onclick="updateCourse()" class="btn btn-success" value="{{ course.id }}">Adicionar</button>
+      </div>
+    </div>
+  </div>
+
+
+{% endfor %}
+
+</div>
+<div class="avaialble_msg_div">
+  <p id="msg_avaialble">{{avaialble_courses_msg}}</p>
+</div>
+</div>
+{% endblock %}

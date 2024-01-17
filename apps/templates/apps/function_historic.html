@@ -1,0 +1,29 @@
+{% extends 'apps/layout.html' %}
+{% load static %}
+
+{% block title %}Historico das Funções{% endblock %}
+{% block scripts %} <script src="{% static 'apps/basic02.js' %}"></script> 
+{% endblock %}
+
+{% block body %}
+<h1 class="h">Histórico das Funções</h1>
+<table class="table table-striped" id="function_table">
+  <thead>
+    <tr>
+        <th scope="col">Data</th>
+        <th scope="col">Função</th>
+        <th scope="col">Editar</th>
+        <th scope="col">Deletar</th>
+    </tr>
+ </thead>
+    <tbody>
+        {% for item in itens %}
+      <tr id="id_{{ item.id }}">
+        <th>{{item.date}}</th>
+        <td>{{item.function}}</td>
+        <td><i  onclick="edit_function('{{ item.id }}')" class="fa-solid fa-pencil"></i></td>
+        <td><i  onclick="remove_function('{{ item.id }}')" class="fa-solid fa-trash"></i></td>
+      </tr>
+       {% endfor %}
+    </tbody>
+{% endblock %}

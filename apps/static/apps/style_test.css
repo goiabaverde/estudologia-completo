@@ -1,0 +1,345 @@
+*{
+    padding: 0;
+    margin: 0;
+
+}
+
+
+body{
+    background-color: #CFD8DC;
+    overflow-x: hidden;
+    transition: backgroud 0.2s linear;
+}
+
+main{
+    margin: 20px 0px;
+}
+
+
+body.dark{
+    background-color: #232c35;
+}
+
+label.dark{
+    color: white;
+}
+
+.card-body.dark{
+    background-color: #121212;
+}
+
+th.dark, td.dark{
+    color: white;
+}
+
+.checkbox{
+    opacity: 0;
+    position: absolute;
+}
+
+.theme_label{
+    cursor: pointer;
+    background-color: #111;
+    border-radius: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    margin: 0;
+    position: relative;
+    transform: scale(1.5);
+
+}
+
+.theme_label .ball{
+    position: absolute;
+    background-color: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    height: 20px;
+    width: 20px;
+    margin: 0px 5px;
+    transform: translateX(0px);
+    transition: transform 0.2s linear;
+}
+
+.checkbox:checked + .theme_label .ball{
+    transform: translateX(24px);
+}
+
+.theme_label i{
+    margin: 0 5px;
+}
+.fa-solid{
+    left: 5px;
+}
+
+li a, .logo{
+    color: white;
+    border: none;
+    text-decoration: none;
+    transition: 0.4s;
+   
+}
+
+p.dark{
+    color: white;
+}
+
+h1.dark, h2.dark, h3.dark, h4.dark, li.dark{
+    color: white;
+}
+
+.logo{
+    letter-spacing:  4px;
+}
+a:hover{
+    opacity: 0.7;
+}
+
+li{
+    list-style: none;
+}
+
+i.fa-bars, i.fa-x{
+    font-style: normal;
+    font-size: 30px;
+    margin-right: 15px;
+    cursor: pointer;
+
+}
+
+#nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 10vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #23232e;
+    
+}
+
+
+
+.nav_list{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    transition: transform 0.3s ease-in-out;
+    background-color: rebeccapurple;
+    margin: 0;
+}
+
+.nav_btn{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.nav_list li, .logo{
+    margin: 0px 32px;
+    color: white;
+    
+}
+
+
+
+nav, .nav_list, .logo_list{
+    color: white;
+    background-color: #23232e;
+}
+
+svg{
+    background-color: transparent;
+    width: 36px;
+   height: 38px;
+}
+
+#nav_icon, #nav_btn{
+    border: none;
+    background-color: transparent;
+}
+
+.mobile_menu{
+    display: block;
+}
+
+.mobile_menu div{
+    transition: 0.3s;
+}
+
+
+svg.bi.bi-list{
+    margin: 0px 10px;
+    cursor: pointer;
+}
+
+.nav_link{
+    margin-bottom: 10px;
+}
+
+.nav_list.active{
+    z-index: 1;
+    opacity: 1;
+    display: flex;
+    transform: translateX(0);
+    background-color: rebeccapurple;
+    transition: transform 0.3s ease-in-out;
+    
+}
+
+.nav_list.non_active{
+    opacity: 1;
+    display: none;
+    transform: translateX(100%);
+    background-color: rebeccapurple;
+    transition: transform 0.5s ease-in-out
+    ;
+}
+
+
+@media(min-width:920px) {
+    #nav_btn{
+        opacity: 0;
+    }
+    .mobile_menu{
+        display: none;
+    }
+    ul.nav_list.active{
+        background-color: #23232e;
+    }  
+}
+
+
+@media(max-width: 920px){
+    .nav_list{
+        opacity: 0;
+        position: absolute;
+        top: 10vh;
+        right: 0;
+        width: 100vw;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+        transform: translateX(100%);
+        background-color: rebeccapurple;
+        transition: transform 0.5s ease-in-out;
+        display: none;
+    }
+   nav{
+    justify-content: space-around;
+   }
+
+   .nav_btn{
+    opacity: 1;
+    }
+
+    .nav_list.active{
+        display: flex;
+    }
+}
+
+
+
+
+.form_area{
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 50vw;
+    grid-template-rows: 1fr 1fr 1fr 1fr 0.5fr;
+}
+
+#submit_btn_area{
+    display: flex;
+    justify-content: center;
+    margin: 5px 0px;
+}
+
+.buttons a{
+    margin-right:  5px;
+}
+
+.form-select{
+    margin: 15px 10px;
+}
+
+
+
+.card{
+    margin: 10px 10px;
+}
+
+.content_my_courses, .content_avaialble_courses{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.grid input{
+    width: 40px;
+    text-align: center;
+}
+
+.calculator{
+    text-align: center;
+}
+
+.centralized{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.centralized-text{
+    text-align: center;
+}
+
+.centralized-text p{
+    margin: 0 7px;
+}
+
+.grid{
+    margin: 15px 0px;
+}
+
+#soulsbourne_img{
+    margin: 10px 0;
+}
+
+@media(max-width: 635px) {
+    #soulsbourne_img{
+        width: 400px;
+    }
+}
+
+@media(max-width: 445px) {
+    #soulsbourne_img{
+        width: 300px;
+    }
+}
+
+.text_content{
+    width: 80vw;
+}
+
+.text_content_about{
+    width: 60vw;
+}
+
+.text_content ul, .text_content p{
+    margin: 10px;
+}
+
+.content{
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+}
+
+.h{
+    margin: 0 10px;
+}

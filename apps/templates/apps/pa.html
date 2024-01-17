@@ -1,0 +1,40 @@
+{% extends 'apps/layout.html' %}
+{% load static %}
+
+{% block title %}Progressão Aritmética{% endblock %}
+{% block scripts %} <script src="{% static 'apps/pa_pg.js' %}"></script>
+<script src="{% static 'apps/basic02.js' %}"></script>
+{% endblock %}
+{% block body %}
+<div class="calculator">
+    <h1>Teoria da Progressão Aritmética</h1>
+    <div class="centralized">
+        <div class="content_theory">
+            <p>A Progressão Aritmética é uma progressão algébrica onde o um número de definido com início dessa progressão e um segundo número é definido com diferença comum, onde a partir dele que a progressão continua, onde cada novo termo é o número anterior somado da diferença comum e assim por diante.</p>
+            <p>O termo geral de uma PA é : an = a1 + (n-1)n</p>
+            <p>A soma de n termos em uma PA é: Sn = [(a1+an)n]/2</p>
+        </div>
+    </div>
+
+    <h1>Progressão Aritmética</h1>
+    <input type="hidden" name="type" id="type" value="pa">
+    <div class="input-area">
+        <form onsubmit="return false;">
+            <input type="hidden" name="" value="new_progression">
+            <label for="a1">a1</label>
+            <input type="number" name="var1" id="a1" value="{{ a1 }}" step="any" required>
+            <label for="r">r</label>
+            <input type="number" name="var2" id="r" value="{{ r }}" step="any" required>
+            {% csrf_token %}
+            <button type="submit" value="new_progression" class="btn btn-primary" id="submit_btn" data-mode="pa">Generate</button >
+        </form>
+        <div class="result_area"></div>
+        <div class="operation_input">
+            <label for="sum">Soma dos termos até o n-ésimo termo.</label>
+            <input type="number" name="sum" id="sum">
+            <button class="btn btn-primary" onclick="sum_pa()">Somar</button>
+        </div>
+        <div class="operation_result"></div>
+    </div>
+</div>
+{% endblock %}

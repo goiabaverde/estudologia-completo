@@ -1,0 +1,17 @@
+{% extends 'apps/layout.html' %}
+{% load static %}
+
+{% block title %}Históricos{% endblock %}
+{% block scripts %}  <script src="{% static 'apps/basic02.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="text_content">
+    <h1 class="h">Históricos</h1>
+    <ul>
+        <p><a href="{% url 'historic' %}">Histórico para as calculadoras normais</a></p>
+        <p><a href="{% url 'historic_matrices' %}">Histórico para as calculadoras de matrizes</a></p>
+        <p><a href="{% url 'historic_function' %}">Histórico para a calculadora gráfica de funções matemáticas</a></p>
+    </ul>
+</div>
+{% endblock %}

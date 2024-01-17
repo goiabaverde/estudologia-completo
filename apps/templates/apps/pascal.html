@@ -1,0 +1,35 @@
+{% extends 'apps/layout.html' %}
+{% load static %}
+
+
+{% block title %}Triângulo de Pascal{% endblock %}
+{% block scripts %} <script src="{% static 'apps/pascal_bi.js' %}"></script>  
+<script src="{% static 'apps/basic02.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="calculator">
+    <h1>Teoria do Triângulo de Pascal</h1>
+    <div class="centralized">
+        <div class="content_theory">
+            <p>Triângulo de Pascal é uma melhor maneira de visualiar a expanssão binomial de Newton onde cada linha é construída com os valores das combinações de C(n,k) em que n é o número da linha e k o número da coluna.</p>
+        </div>
+       
+    </div>
+    <h1>Pascal Triangle</h1>
+    <input type="hidden" name="type" value="ps">
+    <div class="content">
+        <form onsubmit="return false">
+            <label for="row">Números de linhas que o triângulo terá:</label>
+            <input type="number" name="var1" id="row" min="0" value="{{ row }}">
+            <button onclick="pascal()" class="btn btn-primary">Gerar Triângulo</button>
+        </form>
+    </div>
+    <div class="resu">
+        <table id="pascal_table">
+            
+        </table>
+    </div>
+</div>
+
+{% endblock %}

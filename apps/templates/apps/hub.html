@@ -1,0 +1,18 @@
+{% extends 'apps/layout.html' %}
+
+{% block title %}Apps{% endblock %}
+
+{% block body %}
+<div class="text_content">
+    <h1 class="h">Apps</h1>
+    <ul>
+        <p><a href="{% url 'determinant' %}">Calculadora de Determinante de Matriz </a></p>
+        <p><a href="{% url 'product' %}">Calculadora de Produto de Matriz</a></p>
+        <p><a href="{% url 'binomial' %}">Binômio de Newton</a></p>
+        <p><a href="{% url 'pascal' %}">Triângulo de Pascal</a></p>
+        <p><a href="{% url 'pa' %}">Progressão Aritmética</a></p>
+        <p><a href="{% url 'pg' %}">Progressão Geométrica</a></p>
+        <p><a href="{% url 'function' %}">Calculadora Gráfica de Funções</a></p>
+    </ul>
+</div>
+{% endblock %}

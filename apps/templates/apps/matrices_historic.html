@@ -1,0 +1,53 @@
+{% extends 'apps/layout.html' %}
+{% load static %}
+
+{% block title %}Histórico das Matrizes{% endblock %}
+{% block scripts %}  <script src="{% static 'apps/basic02.js' %}"></script>
+<script src="{% static 'apps/product_det.js' %}"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.1/math.js"></script>
+{% endblock %}
+
+{% block body %}
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", ()=>{
+function multiply_matrices(a, b){
+  var result =  math.multiply(a, b)
+  return result
+}
+})
+ 
+</script>
+
+<h1 class="h">Histórico das Matrizes</h1>
+<table class="table table-striped">
+    <thead>
+      <tr>
+          <th scope="col">Data</th>
+          <th scope="col">Linhas A</th>
+          <th scope="col">Colunas A</th>
+          <th scope="col">Matriz A</th>
+          <th scope="col">Linhas B</th>
+          <th scope="col">Colunas B</th>
+          <th scope="col">Matriz B</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Deletar</th>
+      </tr>
+   </thead>
+      <tbody>
+          {% for item in itens %}
+        <tr id="id_{{ item.id }}" >
+          <th>{{item.date}}</th>
+          <td>{{item.number_rows_a}}</td>
+          <td>{{item.number_colunms_a}}</td>
+          <td>{{item.matrix_a}}</td>
+          <td>{{item.number_rows_b}}</td>
+          <td>{{item.number_colunms_b}}</td>
+          <td>{{item.matrix_b}}</td>
+          <td><i  onclick="edit_matrix('{{ item.id }}')" class="fa-solid fa-pencil"></i></td>
+          <td><i  onclick="remove_matrix('{{ item.id }}')"  class="fa-solid fa-trash"></i></td>
+        </tr>
+      </tbody>
+         {% endfor %}
+         <div class="cont">TEST</div>
+{% endblock %}

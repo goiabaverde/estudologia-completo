@@ -1,0 +1,27 @@
+{% extends 'apps/layout.html' %}
+{% load static %}
+
+{% block title %}Binômio de Newton{% endblock %}
+{% block scripts %} <script src="{% static 'apps/pascal_bi.js' %}"></script>  
+<script src="{% static 'apps/basic02.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="calculator">
+    <h1>Teoria do Binômio de Newton</h1>
+    <div class="centralized">       
+        <div class="theory_content">
+            <p>O Binômio de Newton é uma forma fácil de fazer a exponenciação de dois termos usando análise combinatória.</p>
+            <img src="{% static 'apps/images/binomial.jpg' %}" alt="teorema de newton">
+        </div>
+    </div>
+   
+    <p></p>
+    <h1 title="test">Expanssão Binomial</h1>
+    <input type="hidden" name="type" value="bi">
+    <p>(a+b) <sup><input type="number" name="var1" id="binomial_coef" min="0" required value="{{ coef }}"></sup></p>
+    <button onclick="binomial()" class="btn btn-primary">Calcular</button>
+    <div class="resu">  
+    </div>
+</div>
+{% endblock %}

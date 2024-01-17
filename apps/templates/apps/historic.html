@@ -1,0 +1,47 @@
+{% extends 'apps/layout.html' %}
+{% load static %}
+
+{% block title %}Histórico{% endblock %}
+{% block scripts %} <script src="{% static 'apps/basic02.js' %}"></script> {% endblock %}
+
+{% block body %}
+
+
+  <h1 class="h">Histórico</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+          <th scope="col">Data</th>
+          <th scope="col">App</th>
+          <th scope="col">Value-1</th>
+          <th scope="col">Value-2</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Deletar</th>
+      </tr>
+   </thead>
+      <tbody>
+          {% for item in itens %}
+        <tr id="id_{{ item.id }}" >
+          <th>{{item.date}}</th>
+          {% if item.type_app == 'pa' %}
+          <td>PA</td>
+          {% endif %}
+          {% if item.type_app == 'pg' %}
+          <td>PG</td>
+          {% endif %}
+          {% if item.type_app == 'ps' %}
+          <td>Pascal</td>
+          {% endif %}
+          {% if item.type_app == 'bi' %}
+          <td>Newton's Binomial</td>
+          {% endif %}
+          {% if item.type_app == 'fc' %}
+          <td>Function Calculator</td>
+          {% endif %}
+          <td>{{item.var1}}</td>
+          <td>{{item.var2}}</td>
+          <td><i  onclick="edit('{{ item.id }}')" class="fa-solid fa-pencil"></i></td>
+          <td><i  onclick="remove('{{ item.id }}')" class="fa-solid fa-trash"></i></td>
+        </tr>
+         {% endfor %}
+  {% endblock %}

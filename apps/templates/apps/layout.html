@@ -1,0 +1,64 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'apps/style_apps.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="shortcut icon" href="../../static/apps/images/brain_882998.png" type="image/x-icon">
+    <script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+    <script src="{% static 'apps/basic.js' %}"></script>
+    <link rel="stylesheet" href="{% static '/apps/style_apps.css' %}">
+   
+  
+    {% block scripts %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <nav id="nav">
+            <a class="logo" href="{% url 'home' %}">Estudologia</a>
+            <div class="mobile_menu">
+                <div class="nav_btn">  
+                    <i onclick='showMenu()' class="fa-solid fa-bars"></i>
+                </div>        
+            </div>
+            <ul class="nav_list">
+                <input type="checkbox" name="checkbox" class="checkbox" id="chk" onchange="change_theme(document.body.className)">
+                <label class="theme_label" for="chk">
+                    <i class="fa-solid fa-moon"></i>
+                    <i class="fa-solid fa-sun"></i>
+                    <div class="ball"></div>
+                </label>
+                <li class="nav_link"><a href="{% url 'courses' %}">Cursos</a></li>
+                <li class="nav_link"><a href="{% url 'hub' %}">Apps</a></li>
+                <li class="nav_link"><a href="{% url 'about_me' %}">Sobre Mim</a></li>
+                {% if request.user.is_authenticated %}
+                <li><a href="{% url 'historic_hub' %}">Histórico</a></li>
+                <li>{{request.user.username}}</li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li class="nav_link"><a href="{% url 'login' %}">Login</a></li>
+                <li class="nav_link"><a href="{% url 'register' %}">Registrar</a></li>
+                {% endif %}
+            </ul>     
+        </nav>
+        {% if user.is_authenticated %}
+        <input type="hidden" name="is_authenticated" id="is_authenticated" value="{{ user.username }}">
+        {% else %}
+        <input type="hidden" name="is_authenticated" id="is_authenticated" value="not_logged">
+        {% endif %}
+    </header>
+    <main>
+        {% block body %}
+
+        {% endblock %}
+    </main> 
+</body>
+</html>

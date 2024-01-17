@@ -1,0 +1,51 @@
+{% extends 'apps/layout.html' %}
+{% load static %}
+
+
+{% block title %}Progressão Geométrica{% endblock %}
+{% block scripts %} <script src="{% static 'apps/pa_pg.js' %}"></script>
+<script src="{% static 'apps/basic02.js' %}"></script>
+{% endblock %}
+{% block body %}
+<div class="calculator">
+    <h1>Teoria da Progressão Geométrica</h1>
+    <div class="centralized">
+        <div class="content_theory">
+            <p>A Progressão Geométrica é uma progressão algébrica onde um número é definido como primeiro termo da progressão e um segundo termo é definido como razão comum, onde a partir dele que a progressão continua, onde cada novo termo é gerado pela multiplicação do termo anterior a razão comum e assim por diante.</p>
+            <p>O termo geral de uma PG é : an = a1q<sup>n-1</sup></p>
+            <p>A soma de  n termos em PG é : Sn = a1(q<sup>n-1</sup>-1)/q-1</p>
+            <p>O produto dos n primeiros termosem uma PG é: |Pn| = √(a1*an)n, mas tendo cuidado porque é necessário checar se essa progressão é alternante se for e a1 é positivo e n é par o resultao será positivo, mas se n for ímpar o resultado será negativo.</p>
+        </div>
+    </div>
+
+
+    <h1>Progressão Geométrica</h1>
+    <input type="hidden" name="type" id="type" value="pg">
+    <div class="input-area">
+        <form onsubmit="return false">
+            <input type="hidden" name="" value="new_progression">
+            <label for="a1">a1</label>
+            <input type="number" name="var1" id="a1" value="{{ a1 }}" required step="any">
+            <label for="r">q</label>
+            <input type="number" name="var2" id="q" value="{{ q }}" required step="any">
+            <button type="submit" value="new_progression" class="btn btn-primary" id="submit_btn" data-mode="pg">Gerar</button>
+        </form>
+        <div class="result_area"></div>
+        <div class="operation_input">
+                <label for="sum">Soma dos termos até o enésimo termo.</label>
+                <input type="number" name="sum" id="sum">
+                <button class="btn btn-primary" onclick="sum_pg()">Somar</button>
+                <div class="operation_result" id="sum_result"></div>
+        </div>
+ 
+        <div class="operation_input">
+                <label for="pro">Produto dos termos até o enésimo termo.</label>
+                <input type="number" name="pro" id="pro">
+                <button class="btn btn-primary" onclick="pro_pg()">Multiplicar</button>
+                <div class="operation_result" id="pro_result"></div>
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}

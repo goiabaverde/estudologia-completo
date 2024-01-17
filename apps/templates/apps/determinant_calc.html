@@ -1,0 +1,51 @@
+{% extends 'apps/layout.html' %}
+{% load static %}
+
+{% block title %}Calculator of Determinant of Matrix{% endblock %}
+{% block scripts %} <script src="{% static 'apps/product_det.js' %}"></script> 
+<script src="{% static 'apps/basic02.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="calculator">
+  <h1>Teoria sobre determinante de matriz</h1>
+    <p>O determinante de uma matriz é uma forma de expressar toda uma matriz, facilitando o processo de encontrar a solução para um sistema linear de equações.</p>
+    <div class="centralized">
+      <div class="content_theory ">
+        <p>Para calcular o determiante de uma matrix 2x2 é possível usar o método de multiplicar os números da diagonal principal e subtrair do produto da diagonal segundária dessa mesma matriz.</p>
+        <img src="{% static 'apps/images/2-exemplo-2x2.webp' %}" alt="solução de determinante 2x2"   id="img_2x2">>
+      </div>
+    </div>
+  
+    <div class="centralized">
+      <div class="content_theory">
+        <p>Agora para calculaar o determinante de uma matriz 3x3 é usualmente utilizado a Regra de Sarrus que é um algoritmo que envolve multiplicações, somas e subtrações.</p>
+        <img src="{% static '/apps/images/2560px-Sarrus_rule_003.svg.png' %}" alt="" id="img_3x3">
+      </div>
+    </div>
+    <div class="centralized">
+      <div class="content_theory">
+        <p>E para calcular o determinante de uma matrix 4x4 ou maior é possível utilizar o teorema de Laplace que é outro algoritmo que envolve escolher uma fila(coluna ou linha) e calcular para todos os elmentos dessa fila o seu cofator e multiplicar pelo próprio elemento após fazer isso basta somar todos os produtos gerados pelas operações anteriores. Mais informações <a href="https://youtu.be/726AOpEEXrw" rel="external" target="_blank">aqui.</a></p>
+      </div>
+    </div>
+      <h1>Calculadora de determinante de matriz</h1>
+<select name="grid" id="grid_select" class="grid_select"  class="custom-select" onchange="select_grid(this.options[this.selectedIndex].value)"> 
+    <option selected>Selecione</option>
+    <option id="1" value="1">1x1</option>
+    <option id="2" value="2">2x2</option>
+    <option id="3" value="3">3x3</option>
+    <option id="4" value="4">4x4</option>
+    <option id="5" value="5">5x5</option>
+</select>
+
+  <div class="input_area"></div>
+
+  <div class="centralized">
+    <div class="result_det_div">
+        <p class="p_operation_result"></p>
+    </div>
+  </div>
+  <div class="test"></div>
+</div>
+
+{% endblock %}
